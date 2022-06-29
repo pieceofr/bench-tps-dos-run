@@ -28,8 +28,9 @@ gcloud beta compute instances create $vm_name \
     --metadata=startup-script='#!/usr/bin/env bash
 ## Input Env
 echo $(pwd) > startup_path.out
-echo ENPOINT >> startup_path.out
+echo "endpoint : $ENPOINT" >> startup_path.out
 export RPC_ENDPOINT=$ENDPOINT
+echo "rpc_endpoint : $RPC_ENDPOINT" >> startup_path.out
 export DURATION=600
 export TX_COUNT=2000
 exec ./start.sh > start.log'
