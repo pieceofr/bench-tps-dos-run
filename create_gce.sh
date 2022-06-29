@@ -9,6 +9,7 @@ if [[ ! $ENDPOINT ]];then
 	ENDPOINT="http://34.83.161.134"
 	echo ENDPOINT env not found use http://34.83.161.134
 fi
+echo ENDPOINT $ENDPOINT
 gcloud beta compute instances create $vm_name \
 	--project=$project \
 	--source-machine-image=projects/$project/global/machineImages/$img_name \
@@ -27,7 +28,8 @@ gcloud beta compute instances create $vm_name \
     --metadata=startup-script='#!/usr/bin/env bash
 ## Input Env
 echo $(pwd) > startup_path.out
-export RPC_ENDPOINT=$RPC_ENDPOINT
+echo ENPOINT >> startup_path.out
+export RPC_ENDPOINT=$ENDPOINT
 export DURATION=600
 export TX_COUNT=2000
 exec ./start.sh > start.log'
