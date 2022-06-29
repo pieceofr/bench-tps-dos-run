@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-
-vm_name=dos-test-1
+vm_name=dos-test-`date +%y%m%d%h`
 project=principal-lane-200702
 img_name=dos-test-220629
 zone=asia-east1-b
-machine_type=n1-standard-32
+machine_type=n2-standard-32
 network_tag=http-server,https-server
+if [[ ! $ENDPOINT ]];then
+	ENDPOINT="http://34.83.161.134"
+	echo ENDPOINT env not found use http://34.83.161.134
+fi
 gcloud beta compute instances create $vm_name \
 	--project=$project \
 	--source-machine-image=projects/$project/global/machineImages/$img_name \
@@ -23,7 +26,8 @@ gcloud beta compute instances create $vm_name \
 	--reservation-affinity=any \
     --metadata=startup-script='#!/usr/bin/env bash
 ## Input Env
-export RPC_ENDPOINT="http://34.83.161.134"
+echo $(pwd) > startup_path.out
+export RPC_ENDPOINT=$RPC_ENDPOINT
 export DURATION=600
 export TX_COUNT=2000
-exec $HOME/start.sh'
+exec ./start.sh > start.log'
