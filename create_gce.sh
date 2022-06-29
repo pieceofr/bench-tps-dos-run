@@ -10,6 +10,17 @@ if [[ ! $ENDPOINT ]];then
 	echo ENDPOINT env not found use http://34.83.161.134
 fi
 echo ENDPOINT $ENDPOINT
+printf -v meta_script "%s\n%s\n%s\n" \
+			'#!/usr/bin/env bash
+			## Input Env
+			echo $(pwd) > startup_path.out
+			echo "endpoint : $ENPOINT" >> startup_path.out' \
+			"export RPC_ENDPOINT=$ENDPOINT" \
+			'echo "rpc_endpoint : $RPC_ENDPOINT" >> startup_path.out
+			export DURATION=600
+			export TX_COUNT=2000
+			exec ./start.sh > start.log'
+
 gcloud beta compute instances create $vm_name \
 	--project=$project \
 	--source-machine-image=projects/$project/global/machineImages/$img_name \
@@ -25,12 +36,4 @@ gcloud beta compute instances create $vm_name \
 	--shielded-vtpm \
 	--shielded-integrity-monitoring \
 	--reservation-affinity=any \
-    --metadata=startup-script='#!/usr/bin/env bash
-## Input Env
-echo $(pwd) > startup_path.out
-echo "endpoint : $ENPOINT" >> startup_path.out
-export RPC_ENDPOINT=$ENDPOINT
-echo "rpc_endpoint : $RPC_ENDPOINT" >> startup_path.out
-export DURATION=600
-export TX_COUNT=2000
-exec ./start.sh > start.log'
+    --metadata=startup-script=$meta_script
