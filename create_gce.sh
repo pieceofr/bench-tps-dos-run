@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-vm_name=dos-test-`date +%y%m%d%h`
+vm_name=dos-test-`date +%y%m%d-%M`
 project=principal-lane-200702
 img_name=dos-test-220629-1
 zone=asia-east1-b
