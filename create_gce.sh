@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 vm_name=dos-test-`date +%y%m%d%h`
 project=principal-lane-200702
-img_name=dos-test-220629
+img_name=dos-test-220629-1
 zone=asia-east1-b
 machine_type=n2-standard-32
 network_tag=http-server,https-server
