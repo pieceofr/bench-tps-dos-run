@@ -10,7 +10,7 @@ if [[ ! $ENDPOINT ]];then
 	echo ENDPOINT env not found use http://34.83.161.134
 fi
 echo ENDPOINT $ENDPOINT
-printf -v meta_script "%s\n%s\n%s\n" \
+printf -v meta_script '%s\n%s\n%s\n' \
 			'#!/usr/bin/env bash
 			## Input Env
 			echo $(pwd) > startup_path.out
