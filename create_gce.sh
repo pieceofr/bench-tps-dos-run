@@ -81,7 +81,8 @@ if [[ ! -f "id_ed25519_dos_test" ]];then
 	echo "no id_ed25519_dos_test found"
 	exit 1
 fi
-echo $file_in_bucket is download
+echo id_ed25519_dos_test is download
+chmod 600 id_ed25519_dos_test
 
 if [[ -f "exec-pre-start.sh" ]];then
     rm exec-pre-start.sh
