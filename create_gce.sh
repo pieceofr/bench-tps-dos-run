@@ -7,7 +7,12 @@ declare -a instance_name
 echo "imported ENDPOINT : $ENDPOINT"
 if [[ ! "$ENDPOINT" ]];then
 	echo ENDPOINT env not found, exit
-	exit
+	exit 1
+fi
+
+if [[ ! "$NUM_CLIENT" ]];then
+	echo NUM_CLIENT env not found, exit
+	exit 1
 fi
 
 get_time_after() {
@@ -104,11 +109,12 @@ echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &
 # instance_ip+=(35.229.243.74 35.229.243.74)
 
 echo ----- stage: create gc instances ------
-for i in {1..2}
+for i in $(seq 1 $NUM_CLIENT)
 do
 	create_gce
 	sleep 60 # avoid too quick build
 done
+
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
 echo ----- stage: pre-build solana ------
@@ -161,10 +167,10 @@ echo $file_in_bucket is download
 ## PASS ENV
 if [[ "$BUILDKITE_COMMIT" ]];then
 	echo "GIT_COMMIT=$BUILDKITE_COMMIT" >> dos-report-env.sh
-}
+fi
 if [[ "$CLUSTER_VERSION" ]];then
 	echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> dos-report-env.sh
-}
+fi
 
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh
