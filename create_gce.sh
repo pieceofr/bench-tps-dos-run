@@ -4,6 +4,7 @@ declare -a instance_ip
 declare -a instance_name
 
 # prepare ENV
+echo BUILDKITE_COMMIT : $BUILDKITE_COMMIT
 echo "imported ENDPOINT : $ENDPOINT"
 if [[ ! "$ENDPOINT" ]];then
 	echo ENDPOINT env not found, exit
@@ -122,7 +123,7 @@ echo ----- stage: pre-build solana ------
 for sship in "${instance_ip[@]}"
 do
 	echo run pre start:$sship
-	ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh
+	ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh)
 done
 
 echo ----- stage: run benchmark-tps background ------
@@ -136,7 +137,7 @@ start_time2=$outcom_in_sec
 
 for sship in "${instance_ip[@]}"
 do
-	ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-dos-test.sh
+	ret_benchmark=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-dos-test.sh)
 done
 
 echo ----- stage: wait for benchmark to end ------
@@ -174,8 +175,8 @@ echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh
 echo "STOP_TIME=${stop_time}" >> dos-report-env.sh
 echo "STOP_TIME2=${stop_time2}" >> dos-report-env.sh
-exec ./dos-report.sh
-
+ret_dos_report=$(exec ./dos-report.sh)
+echo $ret_dos_report
 echo ----- stage: remove gc instances ------
 echo "instance_name : ${instance_name[@]}"
 for vm in "${instance_name[@]}"
