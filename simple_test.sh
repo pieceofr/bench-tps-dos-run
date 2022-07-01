@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-gcloud compute instances list
+set -ex
+# template for testing agent
