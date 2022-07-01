@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 declare -a instance_ip
 declare -a instance_name
 
@@ -41,7 +41,7 @@ download_file() {
 }
 
 create_gce() {
-	vm_name=dos-test-`date +%y%m%d-%R%M-%S`
+	vm_name=dos-test-`date +%y%m%d-%M-%S`
 	project=principal-lane-200702
 	img_name=dos-test-220701-no-agent
 	zone=asia-east1-b
@@ -119,7 +119,7 @@ done
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
 echo ----- stage: pre-build solana ------
-sleep 630 # wait for laste  instance ssh ready
+sleep 615 # wait for laste  instance ssh ready
 for sship in "${instance_ip[@]}"
 do
 	echo run pre start:$sship
