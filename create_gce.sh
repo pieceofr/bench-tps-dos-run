@@ -119,7 +119,6 @@ done
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
 echo ----- stage: pre-build solana ------
-sleep 615 # wait for laste  instance ssh ready
 for sship in "${instance_ip[@]}"
 do
 	echo run pre start:$sship
@@ -143,7 +142,7 @@ done
 
 echo ----- stage: wait for benchmark to end ------
 
-sleep 30 # wait for benchmark to finish
+sleep 615 # wait for benchmark to finish
 ### Get Time Stop
 adjust_ts=15
 stop_time=$(echo `date -u +%s`)
