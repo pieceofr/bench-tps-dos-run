@@ -41,9 +41,9 @@ download_file() {
 }
 
 create_gce() {
-	vm_name=dos-test-`date +%y%m%d-%M-%S`
+	vm_name=dos-test-`date +%y%m%d-%R%M-%S`
 	project=principal-lane-200702
-	img_name=dos-test-220630-2
+	img_name=dos-test-220701-no-agent
 	zone=asia-east1-b
 	machine_type=n2-standard-32
 	network_tag=http-server,https-server
