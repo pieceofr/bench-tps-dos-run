@@ -181,7 +181,7 @@ echo ----- stage: remove gc instances ------
 echo "instance_name : ${instance_name[@]}"
 for vm in "${instance_name[@]}"
 do
-	gcloud compute instances delete $vm
+	gcloud compute instances delete --quiet $vm
 	echo delete $vms
 done
 
