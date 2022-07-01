@@ -2,12 +2,14 @@
 set -e
 declare -a instance_ip
 declare -a instance_name
+
 # prepare ENV
 echo "imported ENDPOINT : $ENDPOINT"
-if [[ ! $ENDPOINT ]];then
-	ENDPOINT="http://34.83.161.134"
-	echo ENDPOINT env not found use http://34.83.161.134
+if [[ ! "$ENDPOINT" ]];then
+	echo ENDPOINT env not found, exit
+	exit
 fi
+
 get_time_after() {
 	outcom_in_sec=$(echo ${given_ts} + ${add_secs} | bc) 
 }
@@ -105,10 +107,10 @@ echo ----- stage: create gc instances ------
 for i in {1..2}
 do
 	create_gce
-	sleep 5 # avoid too quick build
+	sleep 60 # avoid too quick build
 done
-echo instance_ip ${instance_ip[@]}
-echo instance_name ${instance_name[@]}
+echo "instance_ip ${instance_ip[@]}"
+echo "instance_name ${instance_name[@]}"
 echo ----- stage: pre-build solana ------
 sleep 630 # wait for laste  instance ssh ready
 for sship in "${instance_ip[@]}"
@@ -156,6 +158,14 @@ if [[ ! -f "dos-report-env.sh" ]];then
 fi
 echo $file_in_bucket is download
 
+## PASS ENV
+if [[ "$BUILDKITE_COMMIT" ]];then
+	echo "GIT_COMMIT=$BUILDKITE_COMMIT" >> dos-report-env.sh
+}
+if [[ "$CLUSTER_VERSION" ]];then
+	echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> dos-report-env.sh
+}
+
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh
 echo "STOP_TIME=${stop_time}" >> dos-report-env.sh
@@ -163,7 +173,7 @@ echo "STOP_TIME2=${stop_time2}" >> dos-report-env.sh
 exec ./dos-report.sh
 
 echo ----- stage: remove gc instances ------
-echo instance_name : ${instance_name[@]}
+echo "instance_name : ${instance_name[@]}"
 for vm in "${instance_name[@]}"
 do
 	gcloud compute instances delete $vm

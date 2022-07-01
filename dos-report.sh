@@ -69,9 +69,9 @@ if [[ ! $GIT_COMMIT ]];then
 	GIT_COMMIT="NA"
 	echo GIT_COMMIT env not found, use $GIT_COMMIT
 fi
-if [[ ! $SOLANA_VERSION ]];then
-	SOLANA_VERSION="NA"
-	echo SOLANA_VERSION env not found, use $SOLANA_VERSION
+if [[ ! $CLUSTER_VERSION ]];then
+	CLUSTER_VERSION="NA"
+	echo CLUSTER_VERSION env not found, use $CLUSTER_VERSION
 fi
 
 ## Configuration
@@ -82,7 +82,7 @@ test_type=$TEST_TYPE
 client="tpu"
 num_clients=$NUM_CLIENT
 git_commit=$GIT_COMMIT
-git_version=$SOLANA_VERSION
+cluster_version=$CLUSTER_VERSION
 API_V2_HOST="${INFLUX_HOST}/api/v2/query?org=${INFLUX_ORG_NAME}"
 HEADER_AUTH="Authorization: Token ${INFLUX_TOKEN}"
 CURL_TIMEOUT=12
@@ -365,7 +365,7 @@ gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry-edge
 printf -v gf_url "%s%s%s%s" $gf_prefix $gf_from "&to" $gf_to
 
 ## Construct Test_Configuration
-printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n" "test-type = $test_type" "client = $client" "commit = $git_commit""cluster version = $git_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" "duration = $duration" "tx_count = $tx_count"
+printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n" "test-type = $test_type" "client = $client" "commit = $git_commit""cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" "duration = $duration" "tx_count = $tx_count"
 
 # Construct Slack Result_Details Report
 printf -v s_slot "%s%s%s%s" $start_slot_txt "\\n" $end_slot_txt "\\n"
