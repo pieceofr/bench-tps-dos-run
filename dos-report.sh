@@ -365,7 +365,7 @@ gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry-edge
 printf -v gf_url "%s%s%s%s" $gf_prefix $gf_from "&to" $gf_to
 
 ## Construct Test_Configuration
-printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n" "test-type = $test_type" "client = $client" "commit = $git_commit""cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" "duration = $duration" "tx_count = $tx_count"
+printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n" "test-type = $test_type" "client = $client" "commit = $git_commit" "cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" "duration = $duration" "tx_count = $tx_count"
 
 # Construct Slack Result_Details Report
 printf -v s_slot "%s%s%s%s" $start_slot_txt "\\n" $end_slot_txt "\\n"

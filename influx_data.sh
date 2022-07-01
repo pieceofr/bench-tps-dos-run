@@ -16,19 +16,16 @@ _mean_tx_count='from(bucket: "testnet")|> range(start:'${start_time}' ,stop:'${s
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions")
   					|> group(columns: ["count"])
   					|> mean()|>toInt()
-					|> aggregateWindow(every: 1s,fn: mean)
 					|>drop(columns: ["_start", "_stop","count"])'
 _max_tx_count='from(bucket: "testnet")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions")
   					|> group(columns: ["count"])
   					|> max()|>toInt()
-					|> aggregateWindow(every: 1s,fn: max)
 					|>drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
 _min_tx_count='from(bucket: "testnet")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions")
   					|> group(columns: ["count"])
   					|> min()|>toInt()
-					|> aggregateWindow(every: 1s,fn: min)
 					|>drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
 
 _90_tx_count='from(bucket: "testnet")|> range(start:'${start_time}' ,stop:'${stop_time}')

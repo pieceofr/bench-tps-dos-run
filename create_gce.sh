@@ -137,11 +137,9 @@ start_time2=$outcom_in_sec
 for sship in "${instance_ip[@]}"
 do
 	ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-dos-test.sh
-	echo ***run benchmark : $ssip
 done
 
 echo ----- stage: wait for benchmark to end ------
-
 sleep 615 # wait for benchmark to finish
 ### Get Time Stop
 adjust_ts=15
