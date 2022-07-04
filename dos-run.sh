@@ -48,7 +48,7 @@ download_file() {
 create_gce() {
 	vm_name=dos-test-`date +%y%m%d-%M-%S`
 	project=principal-lane-200702
-	img_name=dos-test-220701-no-agent
+	img_name=dost-test-220704-tpu-quic-udp
 	if [[ ! "$zone" ]];then
 		zone=asia-east1-b
 	fi
