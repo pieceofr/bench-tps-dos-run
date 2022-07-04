@@ -4,7 +4,6 @@ declare -a instance_ip
 declare -a instance_name
 
 # prepare ENV
-echo BUILDKITE_COMMIT : $BUILDKITE_COMMIT
 echo "imported ENDPOINT : $ENDPOINT"
 if [[ ! "$ENDPOINT" ]];then
 	echo ENDPOINT env not found, exit
@@ -13,6 +12,11 @@ fi
 
 if [[ ! "$NUM_CLIENT" ]];then
 	echo NUM_CLIENT env not found, exit
+	exit 1
+fi
+
+if [[ ! "$WEB_SLACK" ]];then
+	echo WEB_SLACK env not found, exit
 	exit 1
 fi
 
@@ -73,11 +77,10 @@ create_gce() {
 }
 
 ### Main ###
-echo ----- stage: prepare execute script ------
-endpoint_statment="ENDPOINT=$ENDPOINT"
-echo endpoint_statment $endpoint_statment 
+echo ----- stage: prepare execute scripts ------
 file_in_bucket=id_ed25519_dos_test
 download_file
+
 if [[ ! -f "id_ed25519_dos_test" ]];then
 	echo "no id_ed25519_dos_test found"
 	exit 1
@@ -94,21 +97,33 @@ if [[ -f "exec-dos-test.sh" ]];then
 fi
 
 # generate a exec-pre-start.sh with ENDPOINT env
-sed  -e 5a\\$endpoint_statment exec-start-template.sh > exec-pre-start.sh
+sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-pre-start.sh
+cat exec-pre-start.sh
+
 if [[ ! -f "exec-pre-start.sh" ]];then
 	echo "no exec-pre-start.sh found"
 	exit 1
 fi
 echo 'exec  ./start-prepare.sh > start-prepare.log' >> exec-pre-start.sh
-sed  -e 5a\\$endpoint_statment exec-start-template.sh > exec-dos-test.sh
+
+sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
+if [[ "$DURATION" ]];then
+    echo "export DURATION=$DURATION" >> exec-dos-test.sh
+fi
+if [[ "$TX_COUNT" ]];then
+    echo "export TX_COUNT=$TX_COUNT" >> exec-dos-test.sh
+fi
+
+if [[ "$KEYPAIR_FILE" ]];then
+    echo "export KEYPAIR_FILE=$KEYPAIR_FILE" >> exec-dos-test.sh
+fi
 if [[ ! -f "exec-dos-test.sh" ]];then
 	echo "no exec-dos-test.sh found"
 	exit 1
 fi
+cat exec-dos-test.sh
 # in order to do none-blocking  run nohup in background
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
-
-# instance_ip+=(35.229.243.74 35.229.243.74)
 
 echo ----- stage: create gc instances ------
 for i in $(seq 1 $NUM_CLIENT)
@@ -125,7 +140,6 @@ do
 	echo run pre start:$sship
 	ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh)
 done
-
 echo ----- stage: run benchmark-tps background ------
 # Get Time Start
 adjust_ts=5
@@ -164,11 +178,22 @@ fi
 echo $file_in_bucket is download
 
 ## PASS ENV
-if [[ "$BUILDKITE_COMMIT" ]];then
-	echo "GIT_COMMIT=$BUILDKITE_COMMIT" >> dos-report-env.sh
+echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
+echo "WEB_SLACK=$WEB_SLACK" >> dos-report-env.sh
+if [[ "$GIT_COMMIT" ]];then
+	echo "GIT_COMMIT=$GIT_COMMIT" >> dos-report-env.sh
 fi
-if [[ "$CLUSTER_VERSION" ]];then
-	echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> dos-report-env.sh
+if [[ "$DURATION" ]];then
+	echo "DURATION=$DURATION" >> dos-report-env.sh
+fi
+if [[ "$TX_COUNT" ]];then
+	echo "TX_COUNT=$TX_COUNT" >> dos-report-env.sh
+fi
+if [[ "$TEST_TYPE" ]];then
+	echo "CLUSTER_VERSION=$TEST_TYPE" >> dos-report-env.sh
+fi
+if [[ "$KEYPAIR_FILE" ]];then
+	echo "KEYPAIR_FILE=$KEYPAIR_FILE" >> dos-report-env.sh
 fi
 
 echo "START_TIME=${start_time}" >> dos-report-env.sh
@@ -185,22 +210,3 @@ do
 	echo delete $vms
 done
 
-#### Memo files #####
-## create_gce.sh 
-##		Main process. To create gces, prepare environment, run benchmark and generate a report
-## exec-start-template.sh
-##		a template to generate 2 files. One is for building solana and another is for dos-test
-## exec-pre-start.sh
-## 		a temporary file generated from exec-start-template.sh. It is send through ssh to evoke start-prepare.sh
-## exec-dos-test.sh
-##		a temporary file generated from exec-start-template.sh. It is send through ssh to evoke start-dos-test.sh
-## dos-report-env.sh 
-##		store in bench-tps-dos which contain influx important ENV. It also be appended start-time and stop-time info dynamically.
-##		dos-report.sh sources this
-## dos-report.sh
-##		generate dos test report and send to the slack
-## influx_data.sh
-##		flux commands. dos-report.sh source this
-## id_ed25519_dos_test 
-##		store in the bench-tps-dosbucket. It is the key to ssh to the gce
-####################

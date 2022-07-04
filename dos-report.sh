@@ -9,6 +9,11 @@ fi
 # read env
 source dos-report-env.sh
 
+if [[ ! $SLACK_WEBHOOK ]];then
+	echo SLACK_WEBHOOK env not found, exit
+	exit 1
+fi
+
 if [[ ! $START_TIME ]];then
 	echo START_TIME env not found, exit
 	exit 1
@@ -62,7 +67,7 @@ if [[ ! $TEST_TYPE ]];then
 fi
 
 if [[ ! $NUM_CLIENT ]];then
-	NUM_CLIENT=10
+	NUM_CLIENT=NA
 	echo TEST_TYPE env not found, use $TEST_TYPE
 fi
 if [[ ! $GIT_COMMIT ]];then
