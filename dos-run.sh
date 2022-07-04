@@ -15,7 +15,7 @@ if [[ ! "$NUM_CLIENT" ]];then
 	exit 1
 fi
 
-if [[ ! "$WEB_SLACK" ]];then
+if [[ ! "$SLACK_WEBHOOK" ]];then
 	echo WEB_SLACK env not found, exit
 	exit 1
 fi
@@ -179,7 +179,7 @@ echo $file_in_bucket is download
 
 ## PASS ENV
 echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
-echo "WEB_SLACK=$WEB_SLACK" >> dos-report-env.sh
+echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 if [[ "$GIT_COMMIT" ]];then
 	echo "GIT_COMMIT=$GIT_COMMIT" >> dos-report-env.sh
 fi
