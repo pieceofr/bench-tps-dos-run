@@ -178,24 +178,30 @@ fi
 echo $file_in_bucket is download
 
 ## PASS ENV
-echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
-echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
+if [[ "$TEST_TYPE" ]];then
+	echo "TEST_TYPE=$TEST_TYPE" >> dos-report-env.sh
+fi
+# Memo: client=tpu is not in the ENV
 if [[ "$GIT_COMMIT" ]];then
 	echo "GIT_COMMIT=$GIT_COMMIT" >> dos-report-env.sh
 fi
+if [[ "$CLUSTER_VERSION" ]];then
+	echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> dos-report-env.sh
+fi
+echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
+
+if [[ "$KEYPAIR_FILE" ]];then
+	echo "KEYPAIR_FILE=$KEYPAIR_FILE" >> dos-report-env.sh
+fi
+
 if [[ "$DURATION" ]];then
 	echo "DURATION=$DURATION" >> dos-report-env.sh
 fi
 if [[ "$TX_COUNT" ]];then
 	echo "TX_COUNT=$TX_COUNT" >> dos-report-env.sh
 fi
-if [[ "$TEST_TYPE" ]];then
-	echo "CLUSTER_VERSION=$TEST_TYPE" >> dos-report-env.sh
-fi
-if [[ "$KEYPAIR_FILE" ]];then
-	echo "KEYPAIR_FILE=$KEYPAIR_FILE" >> dos-report-env.sh
-fi
 
+echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh
 echo "STOP_TIME=${stop_time}" >> dos-report-env.sh
