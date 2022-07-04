@@ -48,8 +48,10 @@ download_file() {
 create_gce() {
 	vm_name=dos-test-`date +%y%m%d-%M-%S`
 	project=principal-lane-200702
-	img_name=dos-test-220701-no-agent
-	zone=asia-east1-b
+	img_name=dos-test-220704-no-agnet
+	if [[ ! "$zone" ]];then
+		zone=asia-east1-b
+	fi
 	machine_type=n2-standard-32
 	network_tag=http-server,https-server
 	ret_create=$(gcloud beta compute instances create $vm_name \
@@ -126,11 +128,23 @@ cat exec-dos-test.sh
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
 
 echo ----- stage: create gc instances ------
+
+if [[ ! "$AVAILABLE_ZONE" ]];then
+	available_zone=( asia-southeast1 us-west2 asia-east1 europe-west4 )
+fi
+
 for i in $(seq 1 $NUM_CLIENT)
 do
+	if [[ $count -ge ${#available_zone[@]} ]];then
+    	count=0
+    fi 
+	zone=${available_zone[$count]}
 	create_gce
+	let count+=1
+	echo "gc instance is created in $zone"
 	sleep 60 # avoid too quick build
 done
+
 
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
