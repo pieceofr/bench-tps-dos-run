@@ -130,7 +130,7 @@ echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &
 echo ----- stage: create gc instances ------
 
 if [[ ! "$AVAILABLE_ZONE" ]];then
-	available_zone=( asia-southeast1 us-west2 asia-east1 europe-west4 )
+	available_zone=( us-west2-b asia-east1-b asia-northeast1-a )
 fi
 
 for i in $(seq 1 $NUM_CLIENT)
