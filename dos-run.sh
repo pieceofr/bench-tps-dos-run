@@ -52,11 +52,11 @@ create_gce() {
 	if [[ ! "$zone" ]];then
 		zone=asia-east1-b
 	fi
-	machine_type=n2-standard-32
+	machine_type=n1-standard-32
 	network_tag=http-server,https-server
 	ret_create=$(gcloud beta compute instances create $vm_name \
 		--project=$project \
-		--source-machine-image=projects/$project/global/machineImages/$img_name \
+		--source-machine-image=$img_name \
 		--zone=$zone \
 		--machine-type=$machine_type \
 		--network-interface=network-tier=PREMIUM,subnet=default \
