@@ -147,9 +147,11 @@ cat exec-dos-test.sh
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
 
 echo ----- stage: create gc instances ------
-
+declare -a available_zone
 if [[ ! "$AVAILABLE_ZONE" ]];then
 	available_zone=( us-west2-b asia-east1-b asia-northeast1-a )
+else
+	available_zone=$AVAILABLE_ZONE
 fi
 
 for i in $(seq 1 $NUM_CLIENT)
@@ -190,7 +192,9 @@ do
 done
 
 echo ----- stage: wait for benchmark to end ------
-sleep 615 # wait for benchmark to finish
+sleep_time=$(echo "$DURATION+10" | bc)
+sleep $sleep_time
+
 ### Get Time Stop
 adjust_ts=15
 stop_time=$(echo `date -u +%s`)

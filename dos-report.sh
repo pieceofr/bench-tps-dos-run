@@ -346,7 +346,7 @@ gf_to=$(echo "scale=2;${stop_time}*1000-28800*1000" | bc)
 gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry-edge?orgId=1&var-datasource=InfluxDB-testnet&var-testnet=tds&var-hostid=All&from="
 printf -v gf_url "%s%s%s%s" $gf_prefix $gf_from "&to" $gf_to
 ## Construct Test_Configuration
-printf -v test_config_common "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 		"test-type = $test_type" "client = $client" "commit = $git_commit" \
 		"cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" \
 		"duration = $duration" "tx_count = $tx_count" "thread_batch_sleep_ms = $thread_batch_sleep_ms"
@@ -362,7 +362,7 @@ printf -v s_ct_stats_tx_count "%s%s%s%s%s%s%s%s%s%s" $mean_mean_ct_stats_tx_coun
 printf -v s_ct_stats_number_of_accts "%s%s%s%s%s%s%s%s%s%s" $mean_ct_stats_num_of_accts_txt "\\n" $max_ct_stats_num_of_accts_txt "\\n" $min_ct_stats_num_of_accts_txt "\\n" $p90_ct_stats_num_of_accts_txt "\\n" $p99_ct_stats_num_of_accts_txt "\\n"
 printf -v blocks_fill "%s%s%s%s%s%s" $total_blocks_txt "\\n" $blocks_fill_50_txt "\\n" $blocks_fill_90_txt "\\n"
 # combine all data
-printf -v s_detail_ret "%s%s%s%s%s%s%s%s" $s_slot $s_tx_count $s_tower_vote_distance $s_optimistic_slot_elapsed $s_ct_stats_block_cost $s_ct_stats_tx_count $s_ct_stats_number_of_accts $blocks_fill
+printf -v s_detail_ret "%s%s%s%s%s%s%s%s%s" $s_time_frame $s_slot $s_tx_count $s_tower_vote_distance $s_optimistic_slot_elapsed $s_ct_stats_block_cost $s_ct_stats_tx_count $s_ct_stats_number_of_accts $blocks_fill
 
 ## Compose and Send Slack
 conf='"```'${test_config}'```"'
