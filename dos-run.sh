@@ -98,22 +98,24 @@ if [[ -f "exec-dos-test.sh" ]];then
     rm exec-dos-test.sh
 fi
 
+if [[ ! "$BUILD_SOLANA" ]];then
+	BUILD_SOLANA="false"
+fi
+if [[ "$BUILD_SOLANA" == "true" ]];then
+	if [[ ! "$CHANNEL" ]];then
+		CHANNEL=edge
+	fi
+	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-template.sh > exec-pre-start.sh
+	cat exec-pre-start.sh
+	if [[ ! -f "exec-pre-start.sh" ]];then
+		echo "no exec-pre-start.sh found"
+		exit 1
+	fi
+	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.sh
+	# generate a exec-dos-test.sh
+	sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
+fi
 # generate a exec-pre-start.sh
-if [[ ! "$CHANNEL" ]];then
-	CHANNEL=edge
-fi
-
-sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-template.sh > exec-pre-start.sh
-cat exec-pre-start.sh
-
-if [[ ! -f "exec-pre-start.sh" ]];then
-	echo "no exec-pre-start.sh found"
-	exit 1
-fi
-echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.sh
-
-# generate a exec-dos-test.sh
-sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
 
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
@@ -165,12 +167,14 @@ done
 
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
-echo ----- stage: pre-build solana ------
-for sship in "${instance_ip[@]}"
-do
-	echo run pre start:$sship
-	ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh)
-done
+if [[ "$BUILD_SOLANA" == "true" ]];then
+	echo ----- stage: pre-build solana ------
+	for sship in "${instance_ip[@]}"
+	do
+		echo run pre start:$sship
+		ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh)
+	done
+fi
 echo ----- stage: run benchmark-tps background ------
 # Get Time Start
 adjust_ts=5
