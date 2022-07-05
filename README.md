@@ -1,30 +1,34 @@
 # Auto bench-tps-dos-test
-
-## Files in the scripts
-+ create_gce.sh 
-    Main process. To create gces, prepare environment, run benchmark and generate a report
-+ exec-start-template.sh
-    a template to generate 2 files. One is for building solana and another is for dos-test
-+ exec-pre-start.sh
-    a temporary file generated from exec-start-template.sh. It is send through ssh to evoke start-prepare.sh
-+ exec-dos-test.sh
-    a temporary file generated from exec-start-template.sh. It is send through ssh to evoke start-dos-test.sh
-+ dos-report-env.sh 
-    store in bench-tps-dos which contain influx important ENV. It also be appended start-time and stop-time info dynamically.  dos-report.sh sources this
-+ dos-report.sh
-    generate dos test report and send to the slack
-+ influx_data.sh
-    flux commands. dos-report.sh source this
-+ id_ed25519_dos_test 
-    store in the bench-tps-dosbucket. It is the key to ssh to the gce
+Implementation for
+[bench-tps-dos gist](https://gist.github.com/joeaba/aba74e87dcd45c132a1ba2ddcaa2af7c)
 
 ## Flow
-+ create NUM_CLIENT gc instances
-+ download solana and build solana
-+ wait for NUM_CLIENT finishing build
-+ start bench-tps 
-+ analyzes data by query influx cloud
-+ send report to slack
++ creates NUM_CLIENT gc instances
++ downloads solana and builds solana (option)
++ waits for NUM_CLIENT finishing build (option)
++ starts UDP/QUIC bench-tps dos
++ analyzes data by query influxCloud
++ sends report to slack
+
+## Files in the scripts
++ dos-run.sh 
+    Main process. To create gces, prepare environment, run benchmark and generate a report then send to slack
++ start-build-solana.sh
+    This downloads solana and builds solana. It is inside the dynamic created instance. 
++ start-dos-test.sh
+    This script runs bench-tps dos test. It is inside the dynamic created instance. 
++ exec-start-template.sh 
+    This script is a template to generate 2 files. One is for ENV and executes start-build-solana.sh and another is for start-dos-test.sh
++ exec-pre-start.sh
+    A temporary file is generated from exec-start-template.sh. 
++ exec-dos-test.sh
+    A temporary file is generated from exec-start-template.sh. 
++ dos-report-env.sh 
+    This script stores in bench-tps-dos bucket. It is downloaded by start-dos-test.sh. It has confidential ENV for start-dos-test.sh
++ dos-report.sh
+    This script generates report from influxCloud and send report to slack
++ influx_data.sh
+    It stores flux commands. dos-report.sh source this.
 
 ## ENV in buildkite
 ```
@@ -45,9 +49,7 @@
 + Must have ENDPOINT / NUM_CLIENT / SLACK_WEBHOOK 
 + Default 
     USE_TPU_CLIENT: "false"
-    TPU_USE_QUIC: "false" (udp test)
+    TPU_USE_QUIC: "false" (UDP test)
     DURATION:  1800
     TX_COUNT:  1000 for quic / 10000 for udp
     SUSTAINED: "false"
-
-+ If GIT_COMMIT / CLUSTER_VERSION is not provided, the report show NA
