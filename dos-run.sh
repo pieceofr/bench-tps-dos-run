@@ -151,7 +151,7 @@ declare -a available_zone
 if [[ ! "$AVAILABLE_ZONE" ]];then
 	available_zone=( us-west2-b asia-east1-b asia-northeast1-a )
 else
-	available_zone=$AVAILABLE_ZONE
+	available_zone=( $AVAILABLE_ZONE )
 fi
 
 for i in $(seq 1 $NUM_CLIENT)
