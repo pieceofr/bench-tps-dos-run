@@ -127,8 +127,8 @@ if [[ "$TX_COUNT" ]];then
     echo "export TX_COUNT=$TX_COUNT" >> exec-dos-test.sh
 fi
 
-if [[ "$SUBSTAINED" ]];then
-    echo "export SUBSTAINED=$SUBSTAINED" >> exec-dos-test.sh
+if [[ "$SUSTAINED" ]];then
+    echo "export SUSTAINED=$SUSTAINED" >> exec-dos-test.sh
 fi
 
 if [[ "$KEYPAIR_FILE" ]];then
@@ -248,10 +248,10 @@ if [[ "$THREAD_BATCH_SLEEP_MS" ]];then
 fi
 echo "THREAD_BATCH_SLEEP_MS=$THREAD_BATCH_SLEEP_MS" >> dos-report-env.sh
 
-if [[ ! "$SUBSTAINED" ]];then
-    SUBSTAINED="false"
+if [[ ! "$SUSTAINED" ]];then
+    SUSTAINED="false"
 fi
-echo "SUBSTAINED=$SUBSTAINED" >> dos-report-env.sh
+echo "SUSTAINED=$SUSTAINED" >> dos-report-env.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh

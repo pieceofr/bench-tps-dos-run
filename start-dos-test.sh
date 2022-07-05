@@ -64,13 +64,13 @@ else
     fi
 fi
 # d) sustained (boolean, if true --sustained, if false nothing)
-if [[ ! "$SUBSTAINED" ]];then
-    SUBSTAINED="false"
+if [[ ! "$SUSTAINED" ]];then
+    SUSTAINED="false"
 fi
-if [[ "$SUBSTAINED" == "true" ]];then
-    substained="--use-tpu-client"
+if [[ "$SUSTAINED" == "true" ]];then
+    sustained="--sustained"
 else
-    substained=""
+    sustained=""
 fi
 # e) duration (default --duration 1800) 
 if [[ ! "$DURATION" ]];then
@@ -123,7 +123,7 @@ echo KEYPAIR_FILE $KEYPAIR_FILE
 echo keyfile : $base/$KEYPAIR_DIR/$KEYPAIR_FILE
 
 benchmark=$(./solana-bench-tps -u $RPC_ENDPOINT --identity $base/$ID_DIR/$ID_FILE --read-client-keys $base/$KEYPAIR_DIR/$KEYPAIR_FILE \
-		$use_client $substained $tpu_use_quic  --duration $duration --tx_count $tx_count --thread-batch-sleep-ms $thread_batch_sleep_ms)
+		$use_client $sustained $tpu_use_quic  --duration $duration --tx_count $tx_count --thread-batch-sleep-ms $thread_batch_sleep_ms)
 
 echo $benchmark
 echo --- end of benchmark $(date)
