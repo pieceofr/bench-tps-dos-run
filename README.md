@@ -28,16 +28,26 @@
 
 ## ENV in buildkite
 ```
-  ENDPOINT: "http://123.123.123.123" 
-  CLUSTER_VERSION: "1.10.29" (Option)
-  GIT_COMMIT: "7f1fb1455fb571346d0e38129129e99efba2c8a2" (Option)
+  BUILD_SOLANA: "false"
+  AVAILABLE_ZONE: "us-west2-b asia-east1-b asia-northeast1-a"
+  ENDPOINT: "http://123.123.123.123"
+  CLUSTER_VERSION: "1.10.29"
+  GIT_COMMIT: "7f1fb1455fb571346d0e38129129e99efba2c8a2"
   NUM_CLIENT: 2
-  SLACK_WEBHOOK: "https://hooks.slack.com/services/XXXXX/xxxxxx/xxxxxxx"
-  DURATION: 1800 (Option)
-  TX_COUNT: 2000 (Option)
-  TEST_TYPE: "QUIC" (Option)
-  KEYPAIR_FILE: "large-keypairs.yaml" (Option)
+  SLACK_WEBHOOK: ""
+  USE_TPU_CLIENT: "true"
+  TPU_USE_QUIC: "true"
+  DURATION: 1800
+  TX_COUNT: 1000
+  SUSTAINED: "true"
+  KEYPAIR_FILE: "xxxxx.yaml"
 ```
-+ Must have ENDPOINT / NUM_CLIENT / SLACK_WEBHOOK
-+ Default Type is QUIC with DURATION=1800 and TX_COUNT=2000. Use KEYPAIR_FILE=large-keypairs.yaml
++ Must have ENDPOINT / NUM_CLIENT / SLACK_WEBHOOK 
++ Default 
+    USE_TPU_CLIENT: "false"
+    TPU_USE_QUIC: "false" (udp test)
+    DURATION:  1800
+    TX_COUNT:  1000 for quic / 10000 for udp
+    SUSTAINED: "false"
+
 + If GIT_COMMIT / CLUSTER_VERSION is not provided, the report show NA

@@ -56,7 +56,7 @@ if [[ "$TPU_USE_QUIC" == "true" ]];then
     fi
 else  
     tpu_use_quic=""
-    thread_batch_sleep_ms=10
+    thread_batch_sleep_ms=1
     if [[ ! "$TX_COUNT" ]];then
         tx_count=10000
     else
