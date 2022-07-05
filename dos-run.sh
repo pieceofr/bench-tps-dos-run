@@ -120,6 +120,12 @@ if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
 fi
 
+if [[ "$TPU_USE_QUIC" == "true" ]];then
+	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
+else
+	 echo "export USE_TPU_CLIENT=false" >> exec-dos-test.s
+fi
+
 if [[ "$DURATION" ]];then
     echo "export DURATION=$DURATION" >> exec-dos-test.sh
 fi
