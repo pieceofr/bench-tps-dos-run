@@ -4,7 +4,7 @@ declare -a instance_ip
 declare -a instance_name
 
 # prepare ENV
-echo "imported ENDPOINT : $ENDPOINT"
+echo "import ENDPOINT : $ENDPOINT"
 if [[ ! "$ENDPOINT" ]];then
 	echo ENDPOINT env not found, exit
 	exit 1
@@ -139,7 +139,7 @@ if [[ ! -f "exec-dos-test.sh" ]];then
 	echo "no exec-dos-test.sh found"
 	exit 1
 fi
-exit 0
+
 cat exec-dos-test.sh
 # in order to do none-blocking  run nohup in background
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
