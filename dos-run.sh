@@ -2,6 +2,7 @@
 set -ex
 declare -a instance_ip
 declare -a instance_name
+declare -a instance_zone
 
 # prepare ENV
 echo "import ENDPOINT : $ENDPOINT"
@@ -72,10 +73,9 @@ create_gce() {
 	echo $ret_create > ret_create.out
 	sship=$(sed 's/^.*nat_ip: //g' ret_create.out)
 	instance_ip+=($sship)
-	echo ip:$sship
 	gc_name=$(sed 's/^.*--- name: //g' ret_create.out | sed 's/ nat_ip:.*//g')
 	instance_name+=($gc_name)
-	echo name:$gc_name
+	instance_zone+=($zone)
 }
 
 ### Main ###
@@ -168,6 +168,7 @@ done
 
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
+echo "instance_zone ${instance_zone[@]}"
 if [[ "$BUILD_SOLANA" == "true" ]];then
 	echo ----- stage: pre-build solana ------
 	for sship in "${instance_ip[@]}"
@@ -269,9 +270,10 @@ ret_dos_report=$(exec ./dos-report.sh)
 echo $ret_dos_report
 echo ----- stage: remove gc instances ------
 echo "instance_name : ${instance_name[@]}"
-for vm in "${instance_name[@]}"
+echo "instance_zone : ${instance_zone[@]}"
+for idx in "${!instance_name[@]}"
 do
-	gcloud compute instances delete --quiet $vm --zone=$zone
+	gcloud compute instances delete --quiet ${instance_name[$idx]} --zone=${instance_zone[$idx]}
 	echo delete $vms
 done
 
