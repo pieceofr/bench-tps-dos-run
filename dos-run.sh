@@ -110,7 +110,7 @@ if [[ ! -f "exec-pre-start.sh" ]];then
 	echo "no exec-pre-start.sh found"
 	exit 1
 fi
-echo 'exec  ./start-prepare.sh > start-prepare.log' >> exec-pre-start.sh
+echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.sh
 
 # generate a exec-dos-test.sh
 sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
@@ -125,6 +125,10 @@ fi
 
 if [[ "$TX_COUNT" ]];then
     echo "export TX_COUNT=$TX_COUNT" >> exec-dos-test.sh
+fi
+
+if [[ "$SUBSTAINED" ]];then
+    echo "export SUBSTAINED=$SUBSTAINED" >> exec-dos-test.sh
 fi
 
 if [[ "$KEYPAIR_FILE" ]];then
@@ -212,7 +216,6 @@ if [[ "$TPU_USE_QUIC" == "true" ]];then
 else 
 	echo "TEST_TYPE=UDP" >> dos-report-env.sh
 fi
-# Memo: client=tpu is not in the ENV
 if [[ "$GIT_COMMIT" ]];then
 	echo "GIT_COMMIT=$GIT_COMMIT" >> dos-report-env.sh
 fi
