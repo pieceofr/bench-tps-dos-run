@@ -115,7 +115,7 @@ echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.
 # generate a exec-dos-test.sh
 sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
 
-if [[ "$USE_TPU_CLIENT" == "true" ]];
+if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
 fi
 
@@ -139,6 +139,7 @@ if [[ ! -f "exec-dos-test.sh" ]];then
 	echo "no exec-dos-test.sh found"
 	exit 1
 fi
+exit 0
 cat exec-dos-test.sh
 # in order to do none-blocking  run nohup in background
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
