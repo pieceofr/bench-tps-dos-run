@@ -214,6 +214,9 @@ fi
 if [[ "$TX_COUNT" ]];then
 	echo "TX_COUNT=$TX_COUNT" >> dos-report-env.sh
 fi
+if [[ "$THREAD_BATCH_SLEEP_MS" ]];then
+	echo "TX_COUNT=$THREAD_BATCH_SLEEP_MS" >> dos-report-env.sh
+fi
 
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 echo "START_TIME=${start_time}" >> dos-report-env.sh
@@ -226,7 +229,7 @@ echo ----- stage: remove gc instances ------
 echo "instance_name : ${instance_name[@]}"
 for vm in "${instance_name[@]}"
 do
-	gcloud compute instances delete --quiet $vm
+	gcloud compute instances delete --quiet $vm --zone=$zone
 	echo delete $vms
 done
 

@@ -79,6 +79,10 @@ if [[ ! $CLUSTER_VERSION ]];then
 	echo CLUSTER_VERSION env not found, use $CLUSTER_VERSION
 fi
 
+if [[ ! $THREAD_BATCH_SLEEP_MS ]];then
+	THREAD_BATCH_SLEEP_MS=1
+	echo THREAD_BATCH_SLEEP_MS env not found, use $THREAD_BATCH_SLEEP_MS
+fi
 ## Configuration
 test_type=$TEST_TYPE
 client="tpu"
@@ -341,7 +345,17 @@ gf_to=$(echo "scale=2;${stop_time}*1000-28800*1000" | bc)
 gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry-edge?orgId=1&var-datasource=InfluxDB-testnet&var-testnet=tds&var-hostid=All&from="
 printf -v gf_url "%s%s%s%s" $gf_prefix $gf_from "&to" $gf_to
 ## Construct Test_Configuration
-printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s" "test-type = $test_type" "client = $client" "commit = $git_commit" "cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" "duration = $duration" "tx_count = $tx_count"
+printf -v test_config_common "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+		"test-type = $test_type" "client = $client" "commit = $git_commit" \
+		"cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" \
+		"duration = $duration" "tx_count = $tx_count"
+if [[ $TEST_TYPE=="UDP" ]];then
+	printf -v test_config "%s\n%s\n" $test_config_common "thread-batch-sleep-ms = $THREAD_BATCH_SLEEP_MS"
+else
+	test_config=$test_config_general
+fi
+
+		
 # Construct Slack Result_Details Report
 printf -v s_time_frame "%s to %s%s" "$(date -u -d @$start_time)" "$(date -u -d @$stop_time)" "\\n"
 printf -v s_slot "%s%s%s%s" $start_slot_txt "\\n" $end_slot_txt "\\n"
