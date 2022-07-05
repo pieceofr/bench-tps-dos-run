@@ -202,38 +202,38 @@ FLUX[end_slot]=$_end_slot
 # TPS
 FLUX[mean_tx_count]=$_mean_tx_count
 FLUX[max_tx_count]=$_max_tx_count
-FLUX[min_tx_count]=$_min_tx_count
+#FLUX[min_tx_count]=$_min_tx_count
 FLUX[p90_tx_count]=$_90_tx_count
 FLUX[p99_tx_count]=$_99_tx_count
 # # tower distance
 FLUX[mean_tower_vote_distance]=$_mean_tower_vote_distance
 FLUX[max_tower_vote_distance]=$_max_tower_vote_distance
-FLUX[min_tower_vote_distance]=$_min_tower_vote_distance
+#FLUX[min_tower_vote_distance]=$_min_tower_vote_distance
 FLUX[p90_tower_vote_distance]=$_90_tower_vote_distance
 FLUX[p99_tower_vote_distance]=$_99_tower_vote_distance
 # # optimistic_slot_elapsed
 FLUX[mean_optimistic_slot_elapsed]=$_mean_optimistic_slot_elapsed
 FLUX[max_optimistic_slot_elapsed]=$_max_optimistic_slot_elapsed
-FLUX[min_optimistic_slot_elapsed]=$_min_optimistic_slot_elapsed
+# FLUX[min_optimistic_slot_elapsed]=$_min_optimistic_slot_elapsed
 FLUX[p90_optimistic_slot_elapsed]=$_90_optimistic_slot_elapsed
 FLUX[p99_optimistic_slot_elapsed]=$_99_optimistic_slot_elapsed
 # # ct_stats_block_cost
 FLUX[mean_ct_stats_block_cost]=$_mean_ct_stats_block_cost
 FLUX[max_ct_stats_block_cost]=$_max_ct_stats_block_cost
-FLUX[min_ct_stats_block_cost]=$_min_ct_stats_block_cost
+# FLUX[min_ct_stats_block_cost]=$_min_ct_stats_block_cost
 FLUX[p90_ct_stats_block_cost]=$_90_ct_stats_block_cost
 FLUX[p99_ct_stats_block_cost]=$_99_ct_stats_block_cost
 # ct_stats_transaction_count
 FLUX[mean_ct_stats_transaction_count]=$_mean_ct_stats_transaction_count
 FLUX[max_ct_stats_transaction_count]=$_max_ct_stats_transaction_count
-FLUX[min_ct_stats_transaction_count]=$_min_ct_stats_transaction_count
+# FLUX[min_ct_stats_transaction_count]=$_min_ct_stats_transaction_count
 FLUX[p90_ct_stats_transaction_count]=$_90_ct_stats_transaction_count
 FLUX[p99_ct_stats_transaction_count]=$_99_ct_stats_transaction_count
 
 # ct_stats_number_of_accounts
 FLUX[mean_ct_stats_number_of_accounts]=$_mean_ct_stats_number_of_accounts
 FLUX[max_ct_stats_number_of_accounts]=$_max_ct_stats_number_of_accounts
-FLUX[min_ct_stats_number_of_accounts]=$_min_ct_stats_number_of_accounts
+# FLUX[min_ct_stats_number_of_accounts]=$_min_ct_stats_number_of_accounts
 FLUX[p90_ct_stats_number_of_accounts]=$_90_ct_stats_number_of_accounts
 FLUX[p99_ct_stats_number_of_accounts]=$_99_ct_stats_number_of_accounts
 

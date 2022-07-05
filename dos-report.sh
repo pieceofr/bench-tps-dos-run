@@ -216,9 +216,6 @@ mean_tx_count_txt="mean_tps: $_value"
 result_input=${FLUX_RESULT['max_tx_count']}
 get_value
 max_tx_count_txt="max_tps: $_value"
-result_input=${FLUX_RESULT['min_tx_count']}
-get_value
-min_tx_count_txt="min_tps: $_value"
 result_input=${FLUX_RESULT['p90_tx_count']}
 get_value
 p90_tx_count_txt="90th_tx_count: $_value"
@@ -236,7 +233,6 @@ get_value
 max_tower_vote_distance_txt="max_tower_vote_distance: $_value"
 result_input="${FLUX_RESULT['min_tower_vote_distance']}"
 get_value
-min_tower_vote_distance_txt="min_tower_vote_distance: $_value"
 result_input="${FLUX_RESULT['p90_tower_vote_distance']}"
 get_value
 p90_tower_vote_distance_txt="90th_tower_vote_distance: $_value"
@@ -251,9 +247,6 @@ mean_optimistic_slot_elapsed_txt="mean_optimistic_slot_elapsed: $_value"
 result_input="${FLUX_RESULT['max_optimistic_slot_elapsed']}"
 get_value
 max_optimistic_slot_elapsed_txt="max_optimistic_slot_elapsed: $_value"
-result_input="${FLUX_RESULT['min_optimistic_slot_elapsed']}"
-get_value
-min_optimistic_slot_elapsed_txt="min_optimistic_slot_elapsed: $_value"
 result_input="${FLUX_RESULT['p90_optimistic_slot_elapsed']}"
 get_value
 p90_optimistic_slot_elapsed_txt="90th_optimistic_slot_elapsed: $_value"
@@ -268,9 +261,6 @@ mean_ct_stats_block_cost_txt="mean_cost_tracker_stats_block_cost: $_value"
 result_input="${FLUX_RESULT['max_ct_stats_block_cost']}"
 get_value
 max_ct_stats_block_cost_txt="max_cost_tracker_stats_block_cost: $_value"
-result_input="${FLUX_RESULT['min_ct_stats_block_cost']}"
-get_value
-min_ct_stats_block_cost_txt="min_cost_tracker_stats_block_cost: $_value"
 result_input="${FLUX_RESULT['p90_ct_stats_block_cost']}"
 get_value
 p90_ct_stats_block_cost_txt="90th_cost_tracker_stats_block_cost: $_value"
@@ -285,9 +275,6 @@ mean_mean_ct_stats_tx_count_txt="mean_cost_tracker_stats_transaction_count: $_va
 result_input="${FLUX_RESULT['max_ct_stats_transaction_count']}"
 get_value
 max_mean_ct_stats_tx_count_txt="max_cost_tracker_stats_transaction_count: $_value"
-result_input="${FLUX_RESULT['min_ct_stats_transaction_count']}"
-get_value
-min_mean_ct_stats_tx_count_txt="min_cost_tracker_stats_transaction_count: $_value"
 result_input="${FLUX_RESULT['p90_ct_stats_transaction_count']}"
 get_value
 p90_mean_ct_stats_tx_count_txt="90th_cost_tracker_stats_transaction_count: $_value"
@@ -302,9 +289,6 @@ mean_ct_stats_num_of_accts_txt="mean_cost_tracker_stats_number_of_accounts: $_va
 result_input="${FLUX_RESULT['max_ct_stats_number_of_accounts']}"
 get_value
 max_ct_stats_num_of_accts_txt="max_cost_tracker_stats_number_of_accounts: $_value"
-result_input="${FLUX_RESULT['min_ct_stats_number_of_accounts']}"
-get_value
-min_ct_stats_num_of_accts_txt="min_cost_tracker_stats_number_of_accounts: $_value"
 result_input="${FLUX_RESULT['p90_ct_stats_number_of_accounts']}"
 get_value
 p90_ct_stats_num_of_accts_txt="90th_cost_tracker_stats_number_of_accounts: $_value"
@@ -354,12 +338,12 @@ printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 # Construct Slack Result_Details Report
 printf -v s_time_frame "time_frame: %s  to  %s%s" "$(date -u -d @$start_time)" "$(date -u -d @$stop_time)" "\\n"
 printf -v s_slot "%s%s%s%s" $start_slot_txt "\\n" $end_slot_txt "\\n"
-printf -v s_tx_count "%s%s%s%s%s%s%s%s%s%s" $mean_tx_count_txt "\\n" $max_tx_count_txt "\\n" $min_tx_count_txt "\\n" $p90_tx_count_txt "\\n" $p99_tx_count_txt "\\n"
-printf -v s_tower_vote_distance "%s%s%s%s%s%s%s%s%s%s" $mean_tower_vote_distance_txt "\\n" $max_tower_vote_distance_txt "\\n" $min_tower_vote_distance_txt "\\n" $p90_tower_vote_distance_txt "\\n" $p99_tower_vote_distance_txt "\\n"
-printf -v s_optimistic_slot_elapsed "%s%s%s%s%s%s%s%s%s%s" $mean_optimistic_slot_elapsed_txt "\\n" $max_optimistic_slot_elapsed_txt "\\n" $min_optimistic_slot_elapsed_txt "\\n" $p99_optimistic_slot_elapsed_txt "\\n" $p99_tx_count_txt "\\n"
-printf -v s_ct_stats_block_cost "%s%s%s%s%s%s%s%s%s%s" $mean_ct_stats_block_cost_txt "\\n" $max_ct_stats_block_cost_txt "\\n" $min_ct_stats_block_cost_txt "\\n" $p90_ct_stats_block_cost_txt "\\n" $p99_ct_stats_block_cost_txt "\\n"
-printf -v s_ct_stats_tx_count "%s%s%s%s%s%s%s%s%s%s" $mean_mean_ct_stats_tx_count_txt "\\n" $max_mean_ct_stats_tx_count_txt "\\n" $min_mean_ct_stats_tx_count_txt "\\n" $p90_mean_ct_stats_tx_count_txt "\\n" $p99_mean_ct_stats_tx_count_txt "\\n"
-printf -v s_ct_stats_number_of_accts "%s%s%s%s%s%s%s%s%s%s" $mean_ct_stats_num_of_accts_txt "\\n" $max_ct_stats_num_of_accts_txt "\\n" $min_ct_stats_num_of_accts_txt "\\n" $p90_ct_stats_num_of_accts_txt "\\n" $p99_ct_stats_num_of_accts_txt "\\n"
+printf -v s_tx_count "%s%s%s%s%s%s%s%s%s%s" $mean_tx_count_txt "\\n" $max_tx_count_txt "\\n" $p90_tx_count_txt "\\n" $p99_tx_count_txt "\\n"
+printf -v s_tower_vote_distance "%s%s%s%s%s%s%s%s" $mean_tower_vote_distance_txt "\\n" $max_tower_vote_distance_txt "\\n" $p90_tower_vote_distance_txt "\\n" $p99_tower_vote_distance_txt "\\n"
+printf -v s_optimistic_slot_elapsed "%s%s%s%s%s%s%s%s" $mean_optimistic_slot_elapsed_txt "\\n" $max_optimistic_slot_elapsed_txt "\\n" $p99_optimistic_slot_elapsed_txt "\\n" $p99_tx_count_txt "\\n"
+printf -v s_ct_stats_block_cost "%s%s%s%s%s%s%s%s" $mean_ct_stats_block_cost_txt "\\n" $max_ct_stats_block_cost_txt "\\n" $p90_ct_stats_block_cost_txt "\\n" $p99_ct_stats_block_cost_txt "\\n"
+printf -v s_ct_stats_tx_count "%s%s%s%s%s%s%s%s" $mean_mean_ct_stats_tx_count_txt "\\n" $max_mean_ct_stats_tx_count_txt "\\n" $p90_mean_ct_stats_tx_count_txt "\\n" $p99_mean_ct_stats_tx_count_txt "\\n"
+printf -v s_ct_stats_number_of_accts "%s%s%s%s%s%s%s%s" $mean_ct_stats_num_of_accts_txt "\\n" $max_ct_stats_num_of_accts_txt "\\n" $p90_ct_stats_num_of_accts_txt "\\n" $p99_ct_stats_num_of_accts_txt "\\n"
 printf -v blocks_fill "%s%s%s%s%s%s" $total_blocks_txt "\\n" $blocks_fill_50_txt "\\n" $blocks_fill_90_txt "\\n"
 # combine all data
 printf -v s_detail_ret "%s%s%s%s%s%s%s%s%s" $s_time_frame $s_slot $s_tx_count $s_tower_vote_distance $s_optimistic_slot_elapsed $s_ct_stats_block_cost $s_ct_stats_tx_count $s_ct_stats_number_of_accts $blocks_fill
