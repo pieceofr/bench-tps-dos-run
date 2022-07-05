@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 # template for testing agent
+
+# USE_TPU_CLIENT="true"

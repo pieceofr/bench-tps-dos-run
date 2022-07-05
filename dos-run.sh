@@ -98,8 +98,12 @@ if [[ -f "exec-dos-test.sh" ]];then
     rm exec-dos-test.sh
 fi
 
-# generate a exec-pre-start.sh with ENDPOINT env
-sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-pre-start.sh
+# generate a exec-pre-start.sh
+if [[ ! "$CHANNEL" ]];then
+	CHANNEL=edge
+fi
+
+sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-template.sh > exec-pre-start.sh
 cat exec-pre-start.sh
 
 if [[ ! -f "exec-pre-start.sh" ]];then
@@ -108,10 +112,17 @@ if [[ ! -f "exec-pre-start.sh" ]];then
 fi
 echo 'exec  ./start-prepare.sh > start-prepare.log' >> exec-pre-start.sh
 
+# generate a exec-dos-test.sh
 sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
+
+if [[ "$USE_TPU_CLIENT" == "true" ]];
+	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
+fi
+
 if [[ "$DURATION" ]];then
     echo "export DURATION=$DURATION" >> exec-dos-test.sh
 fi
+
 if [[ "$TX_COUNT" ]];then
     echo "export TX_COUNT=$TX_COUNT" >> exec-dos-test.sh
 fi
@@ -119,6 +130,7 @@ fi
 if [[ "$KEYPAIR_FILE" ]];then
     echo "export KEYPAIR_FILE=$KEYPAIR_FILE" >> exec-dos-test.sh
 fi
+
 if [[ ! -f "exec-dos-test.sh" ]];then
 	echo "no exec-dos-test.sh found"
 	exit 1
@@ -192,8 +204,13 @@ fi
 echo $file_in_bucket is download
 
 ## PASS ENV
-if [[ "$TEST_TYPE" ]];then
-	echo "TEST_TYPE=$TEST_TYPE" >> dos-report-env.sh
+if [[ ! "$TPU_USE_QUIC" ]];then
+	TPU_USE_QUIC="false"
+fi
+if [[ "$TPU_USE_QUIC" == "true" ]];then
+	echo "TEST_TYPE=QUIC" >> dos-report-env.sh
+else 
+	echo "TEST_TYPE=UDP" >> dos-report-env.sh
 fi
 # Memo: client=tpu is not in the ENV
 if [[ "$GIT_COMMIT" ]];then
@@ -203,26 +220,41 @@ if [[ "$CLUSTER_VERSION" ]];then
 	echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> dos-report-env.sh
 fi
 echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
-
-if [[ "$KEYPAIR_FILE" ]];then
-	echo "KEYPAIR_FILE=$KEYPAIR_FILE" >> dos-report-env.sh
+if [[ ! "$KEYPAIR_FILE" ]];then # use default
+    KEYPAIR_FILE=large-keypairs.yaml
 fi
-
-if [[ "$DURATION" ]];then
-	echo "DURATION=$DURATION" >> dos-report-env.sh
+echo "KEYPAIR_FILE=$KEYPAIR_FILE" >> dos-report-env.sh
+if [[ ! "$DURATION" ]];then
+	DURATION=1800
 fi
-if [[ "$TX_COUNT" ]];then
-	echo "TX_COUNT=$TX_COUNT" >> dos-report-env.sh
+echo "DURATION=$DURATION" >> dos-report-env.sh
+if [[ ! "$TX_COUNT" ]];then
+	if [[ "$TPU_USE_QUIC" == "true" ]];then
+		TX_COUNT=2000
+	else 
+		TX_COUNT=10000
+	fi
 fi
+echo "TX_COUNT=$TX_COUNT" >> dos-report-env.sh
 if [[ "$THREAD_BATCH_SLEEP_MS" ]];then
-	echo "TX_COUNT=$THREAD_BATCH_SLEEP_MS" >> dos-report-env.sh
+	if [[ "$TPU_USE_QUIC" == "true" ]];then
+		THREAD_BATCH_SLEEP_MS=10
+	else 
+		THREAD_BATCH_SLEEP_MS=1
+	fi
 fi
+echo "THREAD_BATCH_SLEEP_MS=$THREAD_BATCH_SLEEP_MS" >> dos-report-env.sh
 
+if [[ ! "$SUBSTAINED" ]];then
+    SUBSTAINED="false"
+fi
+echo "SUBSTAINED=$SUBSTAINED" >> dos-report-env.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time2}" >> dos-report-env.sh
 echo "STOP_TIME=${stop_time}" >> dos-report-env.sh
 echo "STOP_TIME2=${stop_time2}" >> dos-report-env.sh
+cat dos-report-env.sh
 ret_dos_report=$(exec ./dos-report.sh)
 echo $ret_dos_report
 echo ----- stage: remove gc instances ------

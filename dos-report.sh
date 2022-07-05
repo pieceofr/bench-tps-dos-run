@@ -44,7 +44,7 @@ if [[ ! $INFLUX_ORG_NAME ]];then
 fi
 
 if [[ ! $KEYPAIR_FILE ]];then
-	KEYPAIR_FILE="large-keypairs.yaml"
+	KEYPAIR_FILE="NA"
 	echo KEYPAIR_FILE env not found, use $KEYPAIR_FILE
 fi
 
@@ -53,16 +53,16 @@ if [[ ! $INFLUX_HOST ]];then
 	echo INFLUX_HOST env not found, use $INFLUX_HOST
 fi
 if [[ ! $DURATION ]];then
-	DURATION="600"
+	DURATION="NA"
 	echo DURATION env not found, use $DURATION
 fi
 if [[ ! $TX_COUNT ]];then
-	TX_COUNT="2000"
+	TX_COUNT="NA"
 	echo TX_COUNT env not found, use $TX_COUNT
 fi
 
 if [[ ! $TEST_TYPE ]];then
-	TEST_TYPE="QUIC"
+	TEST_TYPE="UDP"
 	echo TEST_TYPE env not found, use $TEST_TYPE
 fi
 
@@ -80,7 +80,7 @@ if [[ ! $CLUSTER_VERSION ]];then
 fi
 
 if [[ ! $THREAD_BATCH_SLEEP_MS ]];then
-	THREAD_BATCH_SLEEP_MS=1
+	THREAD_BATCH_SLEEP_MS="NA"
 	echo THREAD_BATCH_SLEEP_MS env not found, use $THREAD_BATCH_SLEEP_MS
 fi
 ## Configuration
@@ -92,6 +92,7 @@ num_clients=$NUM_CLIENT
 client_keypair_path="keypair-configs/$KEYPAIR_FILE"
 duration=$DURATION
 tx_count=$TX_COUNT
+thread_batch_sleep_ms=$THREAD_BATCH_SLEEP_MS
 API_V2_HOST="${INFLUX_HOST}/api/v2/query?org=${INFLUX_ORG_NAME}"
 HEADER_AUTH="Authorization: Token ${INFLUX_TOKEN}"
 CURL_TIMEOUT=12
@@ -345,16 +346,10 @@ gf_to=$(echo "scale=2;${stop_time}*1000-28800*1000" | bc)
 gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry-edge?orgId=1&var-datasource=InfluxDB-testnet&var-testnet=tds&var-hostid=All&from="
 printf -v gf_url "%s%s%s%s" $gf_prefix $gf_from "&to" $gf_to
 ## Construct Test_Configuration
-printf -v test_config_common "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+printf -v test_config_common "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 		"test-type = $test_type" "client = $client" "commit = $git_commit" \
 		"cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" \
-		"duration = $duration" "tx_count = $tx_count"
-if [[ $TEST_TYPE=="UDP" ]];then
-	printf -v test_config "%s\n%s\n" $test_config_common "thread-batch-sleep-ms = $THREAD_BATCH_SLEEP_MS"
-else
-	test_config=$test_config_general
-fi
-
+		"duration = $duration" "tx_count = $tx_count" "thread_batch_sleep_ms = $thread_batch_sleep_ms"
 		
 # Construct Slack Result_Details Report
 printf -v s_time_frame "%s to %s%s" "$(date -u -d @$start_time)" "$(date -u -d @$stop_time)" "\\n"
