@@ -118,6 +118,8 @@ fi
 sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
+else 
+	echo "export USE_TPU_CLIENT=false" >> exec-dos-test.sh
 fi
 
 if [[ "$TPU_USE_QUIC" == "true" ]];then
