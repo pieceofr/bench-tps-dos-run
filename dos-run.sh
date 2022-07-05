@@ -113,10 +113,9 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 	fi
 	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.sh
 	# generate a exec-dos-test.sh
-	sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
 fi
 # generate a exec-pre-start.sh
-
+sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=true" >> exec-dos-test.sh
 fi
