@@ -34,7 +34,7 @@ fi
 echo --- stage:setup ENV ---
 # b) use_tpu_client (boolean, if true --use-tpu-client, if false --use-rpc-client)
 if [[ ! "$USE_TPU_CLIENT" ]];then
-    use_client="--use-rpc-client"
+    USE_TPU_CLIENT="false"
 fi
 if [[ "USE_TPU_CLIENT" == "true" ]];then
     use_client="--use-tpu-client"
