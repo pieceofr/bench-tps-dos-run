@@ -294,7 +294,7 @@ get_value
 p90_ct_stats_num_of_accts_txt="90th_cost_tracker_stats_number_of_accounts: $_value"
 result_input="${FLUX_RESULT['p99_ct_stats_number_of_accounts']}"
 get_value
-p99_ct_stats_num_of_accts_txt="99th_cost_tracker_stats_number_of_accounts: $_value"
+p99_ct_stats_num_of_accts_txt="99th_cost_tracker_stats_number_of_accounts:\\ $_value"
 
 # # blocks fill
 result_input="${FLUX_RESULT['total_blocks']}"
