@@ -170,7 +170,7 @@ do
 	create_gce
 	let count+=1
 	echo "gc instance is created in $zone"
-	sleep 60 # avoid too quick build
+	sleep 20 # avoid too quick build
 done
 
 
