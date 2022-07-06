@@ -336,7 +336,7 @@ printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 		"duration = $duration" "tx_count = $tx_count" "thread_batch_sleep_ms = $thread_batch_sleep_ms"
 		
 # Construct Slack Result_Details Report
-printf -v s_time_frame "time_frame: %s\  to\  %s%s" "$(date -u -d @$start_time)" "$(date -u -d @$stop_time)" "\\n"
+printf -v s_time_frame "time_frame: %s\\  to\\  %s%s" "$(date -u -d @$start_time)" "$(date -u -d @$stop_time)" "\\n"
 printf -v s_slot "%s%s%s%s" $start_slot_txt "\\n" $end_slot_txt "\\n"
 printf -v s_tx_count "%s%s%s%s%s%s%s%s%s%s" $mean_tx_count_txt "\\n" $max_tx_count_txt "\\n" $p90_tx_count_txt "\\n" $p99_tx_count_txt "\\n"
 printf -v s_tower_vote_distance "%s%s%s%s%s%s%s%s" $mean_tower_vote_distance_txt "\\n" $max_tower_vote_distance_txt "\\n" $p90_tower_vote_distance_txt "\\n" $p99_tower_vote_distance_txt "\\n"
