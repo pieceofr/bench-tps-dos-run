@@ -89,13 +89,14 @@ if [[ ! -f "id_ed25519_dos_test" ]];then
 fi
 echo id_ed25519_dos_test is download
 chmod 600 id_ed25519_dos_test
+ls -al id_ed25519_dos_test
 
-if [[ -f "exec-pre-start.sh" ]];then
-    rm exec-pre-start.sh
+if [[ -f "exec-start-solana-build.sh" ]];then
+    rm exec-start-solana-build.sh
 fi
 
-if [[ -f "exec-dos-test.sh" ]];then
-    rm exec-dos-test.sh
+if [[ -f "exec-start-dos-test.sh" ]];then
+    rm exec-start-dos-test.sh
 fi
 
 if [[ ! "$BUILD_SOLANA" ]];then
@@ -161,7 +162,7 @@ do
 	echo "gc instance is created in $zone"
 	sleep 20 # avoid too quick build
 done
-
+sleep 60 # delay for ssh to be ready 
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
 echo "instance_zone ${instance_zone[@]}"
