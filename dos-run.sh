@@ -54,7 +54,7 @@ create_gce() {
 		zone=asia-east1-b
 	fi
 	machine_type=n1-standard-32
-	network_tag=allow-everything, allow-everything-egress
+	network_tag=allow-everything,allow-everything-egress
 	ret_create=$(gcloud beta compute instances create $vm_name \
 		--project=$project \
 		--source-machine-image=$img_name \
