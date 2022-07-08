@@ -101,57 +101,46 @@ fi
 if [[ ! "$BUILD_SOLANA" ]];then
 	BUILD_SOLANA="false"
 fi
+# add information to exec-start-dos-test.sh
 if [[ "$BUILD_SOLANA" == "true" ]];then
 	if [[ ! "$CHANNEL" ]];then
 		CHANNEL=edge
 	fi
-	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-template.sh > exec-pre-start.sh
+	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-build-solana-template.sh > exec-start-build-solana.sh 
 	cat exec-pre-start.sh
-	if [[ ! -f "exec-pre-start.sh" ]];then
-		echo "no exec-pre-start.sh found"
+	if [[ ! -f "exec-build-solana.sh" ]];then
+		echo "no exec-build-solana.sh found"
 		exit 1
 	fi
-	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-pre-start.sh
-	# generate a exec-dos-test.sh
+	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-start-build-solana.sh
 fi
-# generate a exec-pre-start.sh
-sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-dos-test.sh
+# add information to exec-start-dos-test.sh
+echo "export RPC_ENDPOINT=$ENDPOINT" >> exec-start-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
-	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-dos-test.sh
+	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-start-dos-test.sh
 else 
-	echo "export USE_TPU_CLIENT=\"false\"" >> exec-dos-test.sh
+	echo "export USE_TPU_CLIENT=\"false\"" >> exec-start-dos-test.sh
 fi
-
 if [[ "$TPU_USE_QUIC" == "true" ]];then
-	 echo "export TPU_USE_QUIC=\"true\"" >> exec-dos-test.sh
+	 echo "export TPU_USE_QUIC=\"true\"" >> exec-start-dos-test.sh
 else
-	 echo "export TPU_USE_QUIC=\"false\"" >> exec-dos-test.s
+	 echo "export TPU_USE_QUIC=\"false\"" >> exec-start-dos-test.sh
 fi
-
 if [[ "$DURATION" ]];then
-    echo "export DURATION=$DURATION" >> exec-dos-test.sh
+    echo "export DURATION=$DURATION" >> exec-start-dos-test.sh
 fi
-
 if [[ "$TX_COUNT" ]];then
-    echo "export TX_COUNT=$TX_COUNT" >> exec-dos-test.sh
+    echo "export TX_COUNT=$TX_COUNT" >> exec-start-dos-test.sh
 fi
-
 if [[ "$SUSTAINED" ]];then
-    echo "export SUSTAINED=$SUSTAINED" >> exec-dos-test.sh
+    echo "export SUSTAINED=$SUSTAINED" >> exec-start-dos-test.sh
 fi
-
 if [[ "$KEYPAIR_FILE" ]];then
-    echo "export KEYPAIR_FILE=$KEYPAIR_FILE" >> exec-dos-test.sh
+    echo "export KEYPAIR_FILE=$KEYPAIR_FILE" >> exec-start-dos-test.sh
 fi
-
-if [[ ! -f "exec-dos-test.sh" ]];then
-	echo "no exec-dos-test.sh found"
-	exit 1
-fi
-
 cat exec-dos-test.sh
 # in order to do none-blocking  run nohup in background
-echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-dos-test.sh
+echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-start-dos-test.sh
 
 echo ----- stage: create gc instances ------
 declare -a available_zone
@@ -173,18 +162,19 @@ do
 	sleep 20 # avoid too quick build
 done
 
-
 echo "instance_ip ${instance_ip[@]}"
 echo "instance_name ${instance_name[@]}"
 echo "instance_zone ${instance_zone[@]}"
+
 if [[ "$BUILD_SOLANA" == "true" ]];then
 	echo ----- stage: pre-build solana ------
 	for sship in "${instance_ip[@]}"
 	do
 		echo run pre start:$sship
-		ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-pre-start.sh)
+		ret_pre_build=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-start-build-solana.sh)
 	done
 fi
+
 echo ----- stage: run benchmark-tps background ------
 # Get Time Start
 adjust_ts=5
@@ -196,7 +186,7 @@ start_time2=$outcom_in_sec
 
 for sship in "${instance_ip[@]}"
 do
-	ret_benchmark=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-dos-test.sh)
+	ret_benchmark=$(ssh -i id_ed25519_dos_test -o StrictHostKeyChecking=no sol@$sship 'bash -s' < exec-start-dos-test.sh)
 done
 
 echo ----- stage: wait for benchmark to end ------

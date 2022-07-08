@@ -10,19 +10,17 @@ Implementation for
 + analyzes data by query influxCloud
 + sends report to slack
 
-## Files in the scripts
+## Files
 + dos-run.sh 
     Main process. To create gces, prepare environment, run benchmark and generate a report then send to slack
 + start-build-solana.sh
     This downloads solana and builds solana. It is inside the dynamic created instance. 
 + start-dos-test.sh
     This script runs bench-tps dos test. It is inside the dynamic created instance. 
-+ exec-start-template.sh 
-    This script is a template to generate 2 files. One is for ENV and executes start-build-solana.sh and another is for start-dos-test.sh
-+ exec-pre-start.sh
-    A temporary file is generated from exec-start-template.sh. 
-+ exec-dos-test.sh
-    A temporary file is generated from exec-start-template.sh. 
++ exec-start-build-solana-template.sh 
+   use to generate exec-start-build-solana.sh which is used for executing start-build-solana.sh 
++ exec-start-dos-test-template.sh 
+   use to generate exec-start-dos-test.sh which is used for executing start-dos-test.sh
 + dos-report-env.sh 
     This script stores in bench-tps-dos bucket. It is downloaded by start-dos-test.sh. It has confidential ENV for start-dos-test.sh
 + dos-report.sh

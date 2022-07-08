@@ -3,13 +3,13 @@ if [[ -f "dos-report-env.sh" ]];then
     rm -f dos-report-env.sh
 	echo "dos-report-env.sh removed"
 fi
-if [[ -f "exec-dos-test.sh" ]];then
-    rm -f exec-dos-test.sh
-	echo "exec-dos-test.sh removed"
+if [[ -f "exec-start-dos-test.sh" ]];then
+    rm -f exec-start-dos-test.sh
+	echo "exec-start-dos-test.sh removed"
 fi
-if [[ -f "exec-pre-start.sh" ]];then
-    rm -f exec-pre-start.sh
-	echo "exec-pre-start.sh removed"
+if [[ -f "exec-start-build-solana.sh" ]];then
+    rm -f exec-start-build-solana.sh
+	echo "exec-start-build-solana.sh removed"
 fi
 if [[ -f "id_ed25519_dos_test" ]];then
     rm -f id_ed25519_dos_test
