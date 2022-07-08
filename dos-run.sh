@@ -107,7 +107,7 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 		CHANNEL=edge
 	fi
 	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-build-solana-template.sh > exec-start-build-solana.sh 
-	cat exec-pre-start.sh
+	cat exec-start-build-solana.sh 
 	if [[ ! -f "exec-build-solana.sh" ]];then
 		echo "no exec-build-solana.sh found"
 		exit 1
@@ -138,7 +138,7 @@ fi
 if [[ "$KEYPAIR_FILE" ]];then
     echo "export KEYPAIR_FILE=$KEYPAIR_FILE" >> exec-start-dos-test.sh
 fi
-cat exec-dos-test.sh
+cat exec-start-dos-test.sh
 # in order to do none-blocking  run nohup in background
 echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-start-dos-test.sh
 
