@@ -141,7 +141,7 @@ if [[ "$KEYPAIR_FILE" ]];then
 fi
 cat exec-start-dos-test.sh
 # in order to do none-blocking  run nohup in background
-echo 'exec nohup ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.err &' >> exec-start-dos-test.sh
+echo 'exec ./start-dos-test.sh > start-dos-test.log 2>start-dos-test.log &' >> exec-start-dos-test.sh
 
 echo ----- stage: create gc instances ------
 declare -a available_zone
