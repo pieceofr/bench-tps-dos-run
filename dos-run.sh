@@ -116,7 +116,7 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-start-build-solana.sh
 fi
 # add information to exec-start-dos-test.sh
-echo "export RPC_ENDPOINT=$ENDPOINT" >> exec-start-dos-test.sh
+sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-start-dos-test.sh
 else 
