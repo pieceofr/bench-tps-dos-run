@@ -347,7 +347,7 @@ printf -v s_ct_stats_tx_count "%s%s%s%s%s%s%s%s" $mean_mean_ct_stats_tx_count_tx
 printf -v s_ct_stats_number_of_accts "%s%s%s%s%s%s%s%s" $mean_ct_stats_num_of_accts_txt "\\n" $max_ct_stats_num_of_accts_txt "\\n" $p90_ct_stats_num_of_accts_txt "\\n" $p99_ct_stats_num_of_accts_txt "\\n"
 printf -v blocks_fill "%s%s%s%s%s%s" $total_blocks_txt "\\n" $blocks_fill_50_txt "\\n" $blocks_fill_90_txt "\\n"
 # combine all data
-printf -v s_detail_ret "%s%s%s%s%s%s%s%s%s%s" $s_time_start %s_time_end $s_slot $s_tx_count $s_tower_vote_distance $s_optimistic_slot_elapsed $s_ct_stats_block_cost $s_ct_stats_tx_count $s_ct_stats_number_of_accts $blocks_fill
+printf -v s_detail_ret "%s%s%s%s%s%s%s%s%s%s" $s_time_start $s_time_end $s_slot $s_tx_count $s_tower_vote_distance $s_optimistic_slot_elapsed $s_ct_stats_block_cost $s_ct_stats_tx_count $s_ct_stats_number_of_accts $blocks_fill
 
 ## Compose and Send Slack
 conf='"```'${test_config}'```"'
