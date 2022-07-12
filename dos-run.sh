@@ -122,7 +122,7 @@ fi
 	if [[ -f "exec-start-dos-test.sh" ]];then
 		rm  exec-start-dos-test.sh
 	fi
-sed  -e 5a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
+sed  -e 18a\\"RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-start-dos-test.sh
 else 
