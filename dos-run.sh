@@ -111,6 +111,7 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 		rm  exec-start-build-solana.sh 
 	fi
 	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-build-solana-template.sh > exec-start-build-solana.sh 
+	chmod +x exec-start-build-solana.sh
 	cat exec-start-build-solana.sh 
 	if [[ ! -f "exec-build-solana.sh" ]];then
 		echo "no exec-build-solana.sh found"
@@ -122,7 +123,8 @@ fi
 	if [[ -f "exec-start-dos-test.sh" ]];then
 		rm  exec-start-dos-test.sh
 	fi
-sed  -e 18a\\"RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
+sed  -e 17a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
+chmod +x exec-start-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-start-dos-test.sh
 else 
