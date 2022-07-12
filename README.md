@@ -17,10 +17,9 @@ Implementation for
     This downloads solana and builds solana. It is inside the dynamic created instance. 
 + start-dos-test.sh
     This script runs bench-tps dos test. It is inside the dynamic created instance. 
-+ exec-start-build-solana-template.sh 
++ exec-start-template.sh 
    use to generate exec-start-build-solana.sh which is used for executing start-build-solana.sh 
-+ exec-start-dos-test-template.sh 
-   use to generate exec-start-dos-test.sh which is used for executing start-dos-test.sh
+   use to generate exec-start-dos-test.sh which is used for executing start-dos-test.sh 
 + dos-report-env.sh 
     This script stores in bench-tps-dos bucket. It is downloaded by start-dos-test.sh. It has confidential ENV for start-dos-test.sh
 + dos-report.sh

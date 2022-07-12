@@ -110,7 +110,7 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 	if [[ -f "exec-start-build-solana.sh" ]];then
 		rm  exec-start-build-solana.sh 
 	fi
-	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-build-solana-template.sh > exec-start-build-solana.sh 
+	sed  -e 17a\\"export CHANNEL=$CHANNEL" exec-start-template.sh > exec-start-build-solana.sh 
 	chmod +x exec-start-build-solana.sh
 	cat exec-start-build-solana.sh
 	if [[ ! -f "exec-start-build-solana.sh" ]];then
@@ -120,10 +120,11 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 	echo 'exec  ./start-build-solana.sh > start-build-solana.log' >> exec-start-build-solana.sh
 fi
 # add information to exec-start-dos-test.sh
-	if [[ -f "exec-start-dos-test.sh" ]];then
-		rm  exec-start-dos-test.sh
-	fi
-sed  -e 17a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-dos-test-template.sh > exec-start-dos-test.sh
+if [[ -f "exec-start-dos-test.sh" ]];then
+	rm  exec-start-dos-test.sh
+fi
+
+sed  -e 17a\\"export RPC_ENDPOINT=$ENDPOINT" exec-start-template.sh > exec-start-dos-test.sh
 chmod +x exec-start-dos-test.sh
 if [[ "$USE_TPU_CLIENT" == "true" ]];then
 	 echo "export USE_TPU_CLIENT=\"true\"" >> exec-start-dos-test.sh
