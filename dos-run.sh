@@ -110,7 +110,7 @@ if [[ "$BUILD_SOLANA" == "true" ]];then
 	if [[ -f "exec-start-build-solana.sh" ]];then
 		rm  exec-start-build-solana.sh 
 	fi
-	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-build-solana-template.sh > exec-start-build-solana.sh 
+	sed  -e 5a\\"export CHANNEL=$CHANNEL" exec-start-build-solana-template.sh > exec-start-build-solana.sh 
 	chmod +x exec-start-build-solana.sh
 	cat exec-start-build-solana.sh 
 	if [[ ! -f "exec-build-solana.sh" ]];then
